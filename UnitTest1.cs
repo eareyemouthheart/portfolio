@@ -1,339 +1,371 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DoublyLinkedListWithErrors;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System.Text.RegularExpressions;
+using OpenQA.Selenium.Interactions;
 
-namespace UnitTestProject1
+namespace SelemiumTest
 {
     [TestClass]
     public class UnitTest1
     {
         [TestMethod]
-        //Test addToTail()
-        public void addToTail()
+        public void TestMethod1()
         {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToTail(n1); // 1
-            dL.addToTail(n2); // 1 3
-            dL.addToTail(n3); // 1 3 5
-            Assert.AreEqual(dL.head.num, 1); //1
-            Assert.AreEqual(dL.tail.num, 5); //5
+            
+            IWebDriver driver = new ChromeDriver();
+            driver.Manage().Window.Maximize();
+            driver.Navigate().GoToUrl("http://www.calculator.net");
+            // a - cos
+            //find buttom cos click 
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[1]/div/div[1]/span[2]")).Click();
+            System.Threading.Thread.Sleep(10);
+            //find buttom 6 then click
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[2]/span[3]")).Click();
+            System.Threading.Thread.Sleep(10);
+            //find buttom 0 then click  
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[4]/span[1]")).Click();
+            //get result and output
+            String result1 = driver.FindElement(By.XPath("//*[@id=\"sciOutPut\"]")).Text;
+            Console.WriteLine(result1);
+            // Determine equality
+            Assert.AreEqual("0.5", result1.Substring(1, result1.Length - 1));
+            //Refresh page
+            driver.Navigate().Refresh();
+            System.Threading.Thread.Sleep(5);
         }
 
-
-
-
         [TestMethod]
-        // Test addToHead()
-        public void addToHead()
+        public void TestMethod2()
         {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); // 1
-            dL.addToHead(n2); // 3 1
-            dL.addToHead(n3); // 5 3 1
-            Assert.AreEqual(dL.head.num, 5); //5
-            Assert.AreEqual(dL.tail.num, 1); //1
+            IWebDriver driver = new ChromeDriver();
+            //driver.Manage().Window.Maximize();
+            driver.Navigate().GoToUrl("http://www.calculator.net");
+            // b - log
+            //find buttom log then click
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[1]/div/div[4]/span[5]")).Click();
+            System.Threading.Thread.Sleep(10);
+            // find buttom 1 click
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[3]/span[1]")).Click();
+            System.Threading.Thread.Sleep(10);
+            //get result
+            String result2 = driver.FindElement(By.XPath("//*[@id=\"sciOutPut\"]")).Text;
+            Console.WriteLine(result2);
+            // Determine equality
+            Assert.AreEqual("0", result2.Substring(1, result2.Length - 1));
+
+            
+            driver.Navigate().Refresh();
+            System.Threading.Thread.Sleep(5);
         }
-
-
-
-
         [TestMethod]
-        //Test removeHead()-------------------list is not null
-        public void removeHead()
+        public void TestMethod3()
         {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); // 1
-            dL.addToHead(n2); // 3 1
-            dL.addToHead(n3); // 5 3 1
-            dL.removeHead(); // 3 1
-            Assert.AreEqual(dL.head.num, 3); // 3
-            Assert.AreEqual(dL.tail.num, 1); // 1
+
+            IWebDriver driver = new ChromeDriver();
+            //driver.Manage().Window.Maximize();
+            driver.Navigate().GoToUrl("http://www.calculator.net");
+            // c - x+ y 
+            //find button 1 element then click 
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[3]/span[1]")).Click();
+            System.Threading.Thread.Sleep(10);
+            // find button + element then click 
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[1]/span[4]")).Click();
+            System.Threading.Thread.Sleep(10);
+            // 1
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[3]/span[1]")).Click();
+            System.Threading.Thread.Sleep(10);
+            // =
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[5]/span[4]")).Click();
+            System.Threading.Thread.Sleep(10);
+            //get result
+            String result3 = driver.FindElement(By.XPath("//*[@id=\"sciOutPut\"]")).Text;
+            Console.WriteLine(result3);
+            //Determine equality
+            Assert.AreEqual("2", result3.Substring(1, result3.Length - 1));
+
+             
+            driver.Navigate().Refresh();
+            System.Threading.Thread.Sleep(5);
         }
-
-
-
-
         [TestMethod]
-        //Test removeHead()------------------------ test as if the list have only one node
-        public void removeHeadOne()
+        public void TestMethod4()
         {
-            DLList dL = new DLList();
-            dL.addToHead(new DLLNode(3)); // 3
-            dL.removeHead(); // null
-            dL.removeHead(); // null
-            Assert.AreEqual(dL.head, null); // null
-            Assert.AreEqual(dL.tail, null); // null
-        }
+            IWebDriver driver = new ChromeDriver();
+            //driver.Manage().Window.Maximize();
+            driver.Navigate().GoToUrl("http://www.calculator.net");
 
+            // d - n!
+            //find button 6 element then click 
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[2]/div/div[2]/span[3]")).Click();
+            System.Threading.Thread.Sleep(10);
+            // find button n! element then click 
+            driver.FindElement(By.XPath("//*[@id=\"sciout\"]/tbody/tr[2]/td[1]/div/div[5]/span[5]")).Click();
+            System.Threading.Thread.Sleep(10);
+            //get result
+            String result4 = driver.FindElement(By.XPath("//*[@id=\"sciOutPut\"]")).Text;
+            Console.WriteLine(result4);
+            //Determine equality
+            Assert.AreEqual("720", result4.Substring(1, result4.Length - 1));
 
-
-
-        [TestMethod]
-        // Test removeHead()------------------------ test as if the list is empty
-        public void removeHeadEmp()
-        {
-            DLList newDLL = new DLList();
-            newDLL.removeHead(); // null
-            Assert.AreEqual(newDLL.head, null); // null
-            Assert.AreEqual(newDLL.tail, null); // null
-        }
-
-
-
-        [TestMethod]
-        // test removeTail()
-        public void removeTail()
-        {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToTail(n1); // 1
-            dL.addToTail(n2); // 1 3
-            dL.addToTail(n3); // 1 3 5
-            dL.removeHead(); // 3 5
-            Assert.AreEqual(dL.head.num, 3); // 3
-            Assert.AreEqual(dL.tail.num, 5); // 5
-        }
-
-
-
-        [TestMethod]
-        // test removeTail()---------------------list have only one node
-        public void removeTailOne()
-        {
-            DLList dL = new DLList();
-            dL.addToHead(new DLLNode(3)); // 3
-            dL.removeTail(); // null
-            dL.removeTail(); // null
-            Assert.AreEqual(dL.head, null); // null
-            Assert.AreEqual(dL.tail, null); // null
-        }
-
-
-
-        [TestMethod]
-        // test removeTail()---------------------list empty
-        public void removeTailEmp()
-        {
-            DLList dL = new DLList();
-            dL.removeTail(); // null
-            Assert.AreEqual(dL.head, null); // null
-            Assert.AreEqual(dL.tail, null); // null
-        }
-
-
-
-
-        [TestMethod]
-        // DLLNode search(int num)
-        public void search()
-        {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); // 1
-            dL.addToHead(n2); // 3 1
-            dL.addToHead(n3); // 5 3 1
-            Assert.AreEqual(dL.search(1).num, 1); // search 1 return 1
-            Assert.AreEqual(dL.search(3).num, 3); // return3
-        }
-
-
-
-
-        [TestMethod]
-        // DLLNode search(int num)------------------list in null
-        public void searchNull()
-        {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); // 1
-            dL.addToHead(n2); // 3 1
-            dL.addToHead(n3); // 5 3 1
-            Assert.AreEqual(dL.search(8), null);// return null
-        }
-
-
-
-
-        [TestMethod]
-        //removeNode---------------------------------moving head node in the list
-        public void removeNodeHead()
-        {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); //1
-            dL.addToHead(n2); //3 1
-            dL.addToHead(n3); //5 3 1
-            dL.removeNode(n3); //3 1
-            Assert.AreEqual(dL.head.num, 3);// 3
-            Assert.AreEqual(dL.tail.num, 1);//1
+            driver.Quit();
         }
 
 
         [TestMethod]
-        //removeNode---------------------------------moving node between the head and tail
-        public void removeNodeMiddle()
+        public void Item2()
         {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); //1
-            dL.addToHead(n2); //3 1
-            dL.addToHead(n3); //5 3 1
-            dL.removeNode(n2); //5 1
-            Assert.AreEqual(dL.head.num, 5);// 5
-            Assert.AreEqual(dL.tail.num, 1);//1
-        }
+
+            IWebDriver driver = new ChromeDriver();
+            driver.Manage().Window.Maximize();
+
+            driver.Url = "http://automationpractice.com";
+
+            //Get all the code on the page
+            String html = driver.PageSource;
+            Match m;
+
+            //Regular expression gets links
+            Regex r = new Regex("href\\s*=\\s*(?:\"(?<1>[^\"]*)\"|(?<1>\\S+))",
+            RegexOptions.IgnoreCase);//match case ignored By default case sensitive   
+            //not sure- RegexOptions.Compiled
+            for (m = r.Match(html); m.Success; m = m.NextMatch())
+            {
+                //Console.WriteLine("Found href " + m.Groups[1] + " at " + m.Groups[1].Index);
+                
+                //string matching
+                String href = m.Groups[1].Value;
+                if (href.Contains("http://"))
+                {
+                    //Output all website links
+                    Console.WriteLine(href);
 
 
+                }
 
 
+            }
 
-        [TestMethod]
-        //removeNode---------------------------------removing tail in the list
-        public void removeNodeTail()
-        {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); //1
-            dL.addToHead(n2); //3 1
-            dL.addToHead(n3); //5 3 1
-            dL.removeNode(n1); //5 3
-            Assert.AreEqual(dL.head.num, 5);// 5
-            Assert.AreEqual(dL.tail.num, 3);//3
-        }
+            driver.Quit();
 
-
-
-
-
-
-
-
-        [TestMethod]
-        // removeNode ----------one node on the list
-        public void removeNodeEmptyList()
-        {
-            DLLNode n1 = new DLLNode(1);
-            DLList dL = new DLList();
-            dL.removeNode(n1); // null
-            Assert.AreEqual(dL.head, null); //  NULL
-            Assert.AreEqual(dL.tail, null); // NULL
-        }
-
-
-
-
-
-        [TestMethod]
-        // removeNode--------------no node in the list
-        public void removeNodeNull()
-        {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); // 1
-            dL.addToHead(n2); // 3 1
-            dL.addToHead(n3); // 5 3 1
-            dL.removeNode(new DLLNode(8)); // 5 3 1
-            Assert.AreEqual(dL.head.num, 5); // HEAD
-            Assert.AreEqual(dL.tail.num, 1); // TAIL 
-        }
-
-
-
-
-
-
-        [TestMethod]
-        // test total()------------------with not null list
-        public void total()
-        {
-            DLList dL = new DLList();
-            DLLNode n1 = new DLLNode(1);
-            DLLNode n2 = new DLLNode(3);
-            DLLNode n3 = new DLLNode(5);
-            dL.addToHead(n1); // 1
-            dL.addToHead(n2); // 3 1
-            dL.addToHead(n3); // 5 3 1
-            Assert.AreEqual(dL.total(), 3); // total = 3
-        }
-
-
-
-
-
-        [TestMethod]
-        // test total() -----------with  empty list
-        public void totalEmpty()
-        {
-            DLList dL = new DLList();
-            Assert.AreEqual(dL.total(), 0); // total = 0
-        }
-
-
-
-
-
-
-
-
-
-
-        [TestMethod]
-        //test with correct value 
-        public void IsPrimeTrue()
-        {
-            DLLNode n1 = new DLLNode(7);
-
-            Assert.IsTrue(n1.isPrime(n1.num));// TRUE
-        }
-
-
-
-
-
-        [TestMethod]
-        //Testing isPrime 
-        public void IsPrimeProblem()
-        {
-            DLLNode n1 = new DLLNode(2);
-            DLLNode n2 = new DLLNode(1);
-            DLLNode n3 = new DLLNode(-7);
-
-            Assert.IsTrue(n1.isPrime(n1.num));//true
-            Assert.IsFalse(n2.isPrime(n2.num));//f
-            Assert.IsFalse(n3.isPrime(n3.num));//f
         }
 
         [TestMethod]
-        // incorrect value 
-        public void IsPrimeFalse()
+        public void Item3()
         {
-            DLLNode n2 = new DLLNode(10);
 
-            Assert.IsFalse(n2.isPrime(n2.num));
-            //Fixed < to <=
+            IWebDriver driver = new ChromeDriver();
+            driver.Manage().Window.Maximize();
+
+            driver.Url = "http://automationpractice.com";
+
+            //Get the first commodity price
+            String priceOne = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[1]/div/div[2]/div[1]/span")).Text;
+            Console.WriteLine("The price of first item:" + priceOne);
+
+            Actions action = new Actions(driver);
+             
+            action.MoveToElement(driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[1]/div/div[2]/div[1]/span"))).Perform();
+            System.Threading.Thread.Sleep(5000);
+
+            //Add to cart
+            driver.FindElement(By.LinkText("Add to cart")).Click();
+            System.Threading.Thread.Sleep(5000);
+
+
+            //Click Continue shopping
+            driver.FindElement(By.XPath("/html/body/div/div[1]/header/div[3]/div/div/div[4]/div[1]/div[2]/div[4]/span/span")).Click();
+
+            System.Threading.Thread.Sleep(5000);
+
+
+            IWebElement element = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[2]/div/div[1]/div/a[1]/img"));
+            
+            //Some elements are in the invisible area of the page.To avoid missing elements,Move to the "bottom" of the element Element object, aligned with the "bottom" of the current window
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+            //Get the second commodity price
+            String priceTwo = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[2]/div/div[2]/div[1]/span")).Text;
+            Console.WriteLine("The price of second item:" + priceTwo);
+
+            System.Threading.Thread.Sleep(5000);
+
+             
+            action.MoveToElement(driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[2]/div/div[2]/div[1]/span"))).Perform();
+            System.Threading.Thread.Sleep(5000);
+
+            //add to cart
+            driver.FindElement(By.LinkText("Add to cart")).Click();
+            System.Threading.Thread.Sleep(5000);
+
+            //Click Continue shopping
+            driver.FindElement(By.XPath("/html/body/div/div[1]/header/div[3]/div/div/div[4]/div[1]/div[2]/div[4]/span/span")).Click();
+
+
+
+            //get the third item price
+            String priceThree = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[3]/div/div[2]/div[1]/span")).Text;
+            Console.WriteLine("The price of third item:" + priceThree);
+
+            System.Threading.Thread.Sleep(5000);
+            
+            //use scroll bar to avoid missing elements
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+
+             
+            action.MoveToElement(driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[3]/div/div[2]/div[1]/span"))).Perform();
+            System.Threading.Thread.Sleep(5000);
+
+            //add to cart
+            driver.FindElement(By.LinkText("Add to cart")).Click();
+            System.Threading.Thread.Sleep(5000);
+            //refresh pages
+            //driver.Navigate().Refresh();
+
+            System.Threading.Thread.Sleep(5000);
+
+
+            //get the amount price 
+
+            driver.Url = "http://automationpractice.com/index.php?controller=order&ipa=3";
+            String stringAmount = driver.FindElement(By.XPath("//*[@id=\"total_product\"]")).Text;
+            Double Amount = double.Parse(stringAmount.Substring(1, priceOne.Length - 1));
+
+            //Comparison price and total 
+            double price1 = double.Parse(priceOne.Substring(1, priceOne.Length - 1));
+            double price2 = double.Parse(priceTwo.Substring(1, priceOne.Length - 1));
+            double price3 = double.Parse(priceThree.Substring(1, priceOne.Length - 1));
+
+            double total = price1 + price2 + price3;
+
+            //Determine equality
+            Assert.AreEqual(Amount, total);
+
+            if (Amount.Equals(total))
+            {
+                Console.WriteLine("Total shopping cart price:" + Amount + " Actual total price：" + total + "equal?：" + "YES");
+            }
+            else
+            {
+                Console.WriteLine("Total shopping cart price:" + Amount + " Actual total price：" + price1 + "equal?：" + "NO");
+            }
+
+
         }
+    
+
+        [TestMethod]
+        public void Item4()
+        {
+            IWebDriver driver = new ChromeDriver();
+            driver.Manage().Window.Maximize();
+
+            driver.Url = "http://automationpractice.com";
+
+            //Get the first commodity price
+            String priceOne = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[1]/div/div[2]/div[1]/span")).Text;
+            Console.WriteLine("The first item price:" + priceOne);
+
+            Actions action = new Actions(driver);
+             
+            action.MoveToElement(driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[1]/div/div[2]/div[1]/span"))).Perform();
+            System.Threading.Thread.Sleep(5000);
+
+            //add to cart
+            driver.FindElement(By.LinkText("Add to cart")).Click();
+            System.Threading.Thread.Sleep(5000);
+
+
+            //Click Continue shopping
+            driver.FindElement(By.XPath("/html/body/div/div[1]/header/div[3]/div/div/div[4]/div[1]/div[2]/div[4]/span/span")).Click();
+
+            System.Threading.Thread.Sleep(5000);
+
+
+            IWebElement element = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[2]/div/div[1]/div/a[1]/img"));
+
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+            //Get second item price
+            String priceTwo = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[2]/div/div[2]/div[1]/span")).Text;
+            Console.WriteLine("The second item price:" + priceTwo);
+
+            System.Threading.Thread.Sleep(5000);
+
+             
+            action.MoveToElement(driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[2]/div/div[2]/div[1]/span"))).Perform();
+            System.Threading.Thread.Sleep(5000);
+
+            //Add to cart
+            driver.FindElement(By.LinkText("Add to cart")).Click();
+            System.Threading.Thread.Sleep(5000);
+
+            //Click Continue shopping
+            driver.FindElement(By.XPath("/html/body/div/div[1]/header/div[3]/div/div/div[4]/div[1]/div[2]/div[4]/span/span")).Click();
+            
+             
+
+
+            //Get third item price
+            String priceThree = driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[3]/div/div[2]/div[1]/span")).Text;
+            Console.WriteLine("The third item price:" + priceThree);
+
+            System.Threading.Thread.Sleep(5000);
+
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+
+
+             
+            action.MoveToElement(driver.FindElement(By.XPath("//*[@id=\"homefeatured\"]/li[3]/div/div[2]/div[1]/span"))).Perform();
+            System.Threading.Thread.Sleep(5000);
+
+            //add to cart
+            driver.FindElement(By.LinkText("Add to cart")).Click();
+            System.Threading.Thread.Sleep(5000);
+
+
+
+
+            //Comparison price
+            double price2 = double.Parse(priceTwo.Substring(1, priceTwo.Length - 1));
+
+
+
+            
+
+            driver.Url = "http://automationpractice.com/index.php?controller=order&ipa=3";
+            System.Threading.Thread.Sleep(5000);
+
+
+            //Delete the third item in the cart
+            driver.FindElement(By.XPath("//*[@id=\"3_13_0_0\"]/i")).Click();
+
+            System.Threading.Thread.Sleep(5000);
+
+            //Delete the second item in the cart
+            driver.FindElement(By.XPath("//*[@id=\"1_1_0_0\"]/i")).Click();
+
+
+            System.Threading.Thread.Sleep(5000);
+            //get the amount price 
+            String stringAmount = driver.FindElement(By.XPath("//*[@id=\"total_product\"]")).Text;
+            Double Amount = double.Parse(stringAmount.Substring(1, priceOne.Length - 1));
+
+            //Determine equality
+            Assert.AreEqual(Amount, price2);
+
+            
+            if (Amount.Equals(price2))
+            {
+                Console.WriteLine("Total shopping cart price:" + Amount + " Actual total price：" + price2 + "equal?：" + "Yes");
+            }
+            else
+            {
+                Console.WriteLine("Total shopping cart price:" + Amount + " Actual total price：" + price2 + "equal?：" + "No");
+            }
+        }
+
     }
 }
